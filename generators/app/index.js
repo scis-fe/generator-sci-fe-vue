@@ -1,79 +1,66 @@
-const Generator = require('yeoman-generator')
+const Generator = require("yeoman-generator");
 
 module.exports = class extends Generator {
-    prompting() {
-        return this.prompt([
-            {
-                type: 'input',
-                name: 'name',
-                message: '请输入项目名称',
-                default: 'scis-standard-vue-project'
-            },
-            {
-                type: 'input',
-                name: 'version',
-                message: '请输入版本号',
-                default: '1.0.0'
-            }
-        ]).then(answers => {
-            this.answers = answers
-        })
+  prompting() {
+    return this.prompt([
+      {
+        type: "input",
+        name: "name",
+        message: "请输入项目名称",
+        default: "default-project-web",
+      },
+      {
+        type: "input",
+        name: "version",
+        message: "请输入版本号",
+        default: "1.0.0",
+      },
+      {
+        type: "rawlist",
+        name: "template",
+        message: "选择模板",
+        choices: [
+          {
+            name:
+              "Vue2.0 + JavaScript + AntDv（含ElementUI和VantUI的配置文件）",
+            value: "vue-js",
+          },
+          { name: "Vue2.0 + TypeScript + AntDv", value: "vue-ts" },
+        ],
+        default: 0,
+      },
+    ]).then((answers) => {
+      this.answers = answers;
+    });
+  }
+  writing() {
+    console.log("正在处理...");
+    const context = this.answers || {};
+    let fileList = [];
+    switch (this.answers.template) {
+      case "vue-ts":
+        fileList = require("./filelist/vue-ts.json");
+        break;
+      default:
+        fileList = require("./filelist/vue-js.json");
+        break;
     }
-    writing() {
-        const fileList = [
-            'public/img/icons/android-chrome-192x192.png',
-            'public/img/icons/android-chrome-512x512.png',
-            'public/img/icons/apple-touch-icon-120x120.png',
-            'public/img/icons/apple-touch-icon-152x152.png',
-            'public/img/icons/apple-touch-icon-180x180.png',
-            'public/img/icons/apple-touch-icon-60x60.png',
-            'public/img/icons/apple-touch-icon-76x76.png',
-            'public/img/icons/apple-touch-icon.png',
-            'public/img/icons/favicon-16x16.png',
-            'public/img/icons/favicon-32x32.png',
-            'public/img/icons/msapplication-icon-144x144.png',
-            'public/img/icons/mstile-150x150.png',
-            'public/img/icons/safari-pinned-tab.svg',
-            'public/favicon.ico',
-            'public/index.html',
-            'public/manifest.json',
-            'public/robots.txt',
-            'src/assets/logo.png',
-            'src/import/i.element.js',
-            'src/import/i.vant.js',
-            'src/import/readme.md',
-            'src/utils/common.util.js',
-            'src/utils/EncryptUtils.js',
-            'src/utils/GlobalData.js',
-            'src/utils/Http.js',
-            'src/views/About.vue',
-            'src/views/Home.vue',
-            'src/App.vue',
-            'src/main.js',
-            'src/registerServiceWorker.js',
-            'src/router.js',
-            'src/store.js',
-            '.browserslistrc',
-            '.editorconfig',
-            '.env',
-            '.env.dev.build',
-            '.env.dev.run',
-            '.env.prod.build',
-            '.eslintrc.js',
-            '.prettierrc.js',
-            'babel.config.js',
-            'package.json',
-            'postcss.config.js',
-            'README.md',
-            'vue.config.js',
-        ]
-        const context = this.answers || {}
-        fileList.forEach(el => {
-            const targetPath = this.answers.name + '/' + el
-            const tmpl = this.templatePath(el)
-            const output = this.destinationPath(targetPath)
-            this.fs.copyTpl(tmpl, output, context)
-        })
+    fileList.forEach((el) => {
+      const targetPath = this.answers.name + "/" + el;
+      const templatePath = this.answers.template + "/" + el;
+      const tmpl = this.templatePath(templatePath);
+      const output = this.destinationPath(targetPath);
+      this.fs.copyTpl(tmpl, output, context);
+    });
+  }
+  end() {
+    console.log(`
+    ----------------------------------------------------------------
+      模板生成完成，开发时候请严格参照《编码规范》进行开发。
 
-    }
-}
+      初始化： npm insatll  或 yarn insatll
+      运行：npm run dev 或 yarn dev
+      构建：npm run prod-build 或 yarn prod-build
+    `);
+  }
+};

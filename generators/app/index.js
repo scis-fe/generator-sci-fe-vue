@@ -46,8 +46,8 @@ module.exports = class extends Generator {
         break;
     }
     fileList.forEach((el) => {
-      const targetPath = this.answers.name + "/" + el;
       const templatePath = this.answers.template + "/" + el;
+      const targetPath = this.answers.name + "/" + el;
       const tmpl = this.templatePath(templatePath);
       const output = this.destinationPath(targetPath);
       this.fs.copyTpl(tmpl, output, context);

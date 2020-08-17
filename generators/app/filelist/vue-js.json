@@ -41,7 +41,6 @@
   ".env.dev.run.conf",
   ".env.prod.build.conf",
   ".eslintrc.js",
-  ".gitignore",
   ".prettierrc.js",
   "babel.config.js",
   "package.json",

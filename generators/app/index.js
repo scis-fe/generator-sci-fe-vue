@@ -1,6 +1,13 @@
 const Generator = require("yeoman-generator");
 
 module.exports = class extends Generator {
+  constructor(args, options) {
+    super(args, options);
+    const pkg = require('../../package.json')
+    if (pkg.version) {
+      console.log('欢迎使用sci-fe-cli, 当前CLI版本：', pkg.version)
+    }
+  }
   prompting() {
     return this.prompt([
       {
@@ -54,11 +61,13 @@ module.exports = class extends Generator {
     });
   }
   end() {
+    
     console.log(`
     ----------------------------------------------------------------
       模板生成完成，开发时候请严格参照《编码规范》进行开发。
 
-      初始化： npm insatll  或 yarn insatll
+      cd ${ this.answers.name }
+      初始化： npm install  或 yarn install
       运行：npm run dev 或 yarn dev
       构建：npm run prod-build 或 yarn prod-build
     `);

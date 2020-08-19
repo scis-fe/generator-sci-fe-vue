@@ -41,7 +41,6 @@
   ".env.dev.run.conf",
   ".env.prod.build.conf",
   ".eslintrc.js",
-  ".npmrc",
   "babel.config.js",
   "package.json",
   "README.md",
